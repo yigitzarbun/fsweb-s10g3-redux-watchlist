@@ -1,8 +1,14 @@
 import { movies } from "../movies";
-import { NEXT_PLACE, PREV_PLACE, FIRST_PLACE } from "../actions/movieActions";
+import {
+  NEXT_PLACE,
+  PREV_PLACE,
+  FIRST_PLACE,
+  REMOVE_MOVIE,
+  ADD_MOVIE,
+} from "../actions/movieActions";
 
 const initialState = {
-  movies: movies,
+  movies: movies.slice(0, 5),
   place: 0,
 };
 
@@ -30,6 +36,25 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         place: copyPlace3,
+      };
+
+    case REMOVE_MOVIE:
+      const copyMovies = [...state.movies];
+      let resultArray = copyMovies.filter(
+        (movie) => movie.id !== action.payload
+      );
+      return {
+        ...state,
+        movies: [...resultArray],
+      };
+
+    case ADD_MOVIE:
+      const copyMovies2 = [...state.movies];
+      const newMovie = action.payload;
+      const resultArray2 = [...copyMovies2, newMovie];
+      return {
+        ...state,
+        movies: [...resultArray2],
       };
     default:
       return state;

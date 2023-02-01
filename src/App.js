@@ -6,7 +6,12 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 import { addFav, removeFav } from "./actions/favActions";
-import { nextPlace, prevPlace, firstPlace } from "./actions/movieActions";
+import {
+  nextPlace,
+  prevPlace,
+  firstPlace,
+  removeMovie,
+} from "./actions/movieActions";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +33,8 @@ function App() {
 
   const handleAddFav = () => {
     dispatch(addFav(movies[sira]));
+    dispatch(removeMovie(movies[sira].id));
+    dispatch(firstPlace());
   };
 
   const handleRemove = () => {
@@ -107,7 +114,12 @@ function App() {
         <Route path="/listem">
           <div>
             {favMovies.map((movie) => (
-              <FavMovie key={movie.id} title={movie.title} id={movie.id} />
+              <FavMovie
+                key={movie.id}
+                title={movie.title}
+                id={movie.id}
+                movie={movie}
+              />
             ))}
           </div>
         </Route>

@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils";
 import { ADD_FAV, REMOVE_FAV } from "../actions/favActions";
 
 const initialState = {
@@ -13,10 +14,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         favs: [...copyFavs],
       };
+
     case REMOVE_FAV:
       const copyFavs2 = [...state.favs];
       const resultFavsArray = copyFavs2.filter(
-        (item) => action.payload !== item.id
+        (item) => item.id !== action.payload
       );
       return {
         ...state,
