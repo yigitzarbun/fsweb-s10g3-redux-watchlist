@@ -5,20 +5,33 @@ import FavMovie from "./components/FavMovie";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { addFav } from "./actions/favActions";
+import { addFav, removeFav } from "./actions/favActions";
+import { nextPlace, prevPlace, firstPlace } from "./actions/movieActions";
 
 function App() {
   const dispatch = useDispatch();
-  const [sira, setSira] = useState(0);
-
   const movies = useSelector((store) => store.moviesReducer.movies);
   const favMovies = useSelector((store) => store.favReducer.favs);
-  function sonrakiFilm() {
-    setSira(sira + 1);
+  const sira = useSelector((store) => store.moviesReducer.place);
+
+  function handleNext() {
+    dispatch(nextPlace());
   }
 
-  const handleAddFav = (movie) => {
+  function handlePrev() {
+    dispatch(prevPlace());
+  }
+
+  function handleFirstMovie() {
+    dispatch(firstPlace());
+  }
+
+  const handleAddFav = () => {
     dispatch(addFav(movies[sira]));
+  };
+
+  const handleRemove = () => {
+    dispatch(removeFav(movies[sira].id));
   };
 
   return (
@@ -45,18 +58,49 @@ function App() {
           <Movie sira={sira} />
 
           <div className="flex gap-3 justify-end py-3">
-            <button
-              onClick={sonrakiFilm}
-              className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
-            >
-              Sıradaki
-            </button>
-            <button
-              className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white"
-              onClick={handleAddFav}
-            >
-              Listeme ekle
-            </button>
+            {sira > 0 && (
+              <button
+                className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
+                onClick={handleFirstMovie}
+              >
+                Başa Dön
+              </button>
+            )}
+
+            {sira > 0 && (
+              <button
+                className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
+                onClick={handlePrev}
+              >
+                Önceki
+              </button>
+            )}
+
+            {sira < movies.length - 1 && (
+              <button
+                onClick={handleNext}
+                className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
+              >
+                Sıradaki
+              </button>
+            )}
+
+            {!favMovies.includes(movies[sira]) && (
+              <button
+                className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white"
+                onClick={handleAddFav}
+              >
+                Listeme ekle
+              </button>
+            )}
+            {favMovies.includes(movies[sira]) && (
+              <button
+                className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white"
+                onClick={handleRemove}
+              >
+                Listemden çıkar
+              </button>
+            )}
           </div>
         </Route>
 
