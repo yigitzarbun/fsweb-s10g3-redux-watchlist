@@ -1,28 +1,26 @@
-import { useState } from "react";
 import { Switch, Route, NavLink } from "react-router-dom";
 import Movie from "./components/Movie";
 import FavMovie from "./components/FavMovie";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { addFav, removeFav } from "./actions/favActions";
+import { addFav, removeFav, initialLoad } from "./actions/favActions";
 import {
   nextPlace,
   prevPlace,
   firstPlace,
   removeMovie,
 } from "./actions/movieActions";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
   const movies = useSelector((store) => store.moviesReducer.movies);
   const favMovies = useSelector((store) => store.favReducer.favs);
   const sira = useSelector((store) => store.moviesReducer.place);
-
   function handleNext() {
     dispatch(nextPlace());
   }
-
   function handlePrev() {
     dispatch(prevPlace());
   }
@@ -41,6 +39,9 @@ function App() {
     dispatch(removeFav(movies[sira].id));
   };
 
+  useEffect(() => {
+    dispatch(initialLoad());
+  }, []);
   return (
     <div className="wrapper max-w-2xl mx-auto">
       <nav className="flex text-2xl pb-6 pt-8 gap-2 justify-center">
