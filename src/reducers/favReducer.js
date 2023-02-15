@@ -1,5 +1,5 @@
 import { ADD_FAV, REMOVE_FAV, INITIAL_FAVS } from "../actions/favActions";
-
+import { toast } from "react-toastify";
 const initialState = {
   favs: [],
 };
@@ -43,6 +43,7 @@ const reducer = (state = getInitialFavs(key), action) => {
         (item) => item.id !== action.payload
       );
       writeToLocalStorage([...resultFavsArray]);
+      toast("Favorilerden çıkarıldı");
       return {
         ...state,
         favs: resultFavsArray,

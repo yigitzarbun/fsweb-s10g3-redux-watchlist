@@ -1,4 +1,4 @@
-import { Switch, Route, NavLink } from "react-router-dom";
+import { Switch, Route, NavLink, Link } from "react-router-dom";
 import Movie from "./components/Movie";
 import FavMovie from "./components/FavMovie";
 import { useSelector } from "react-redux";
@@ -83,6 +83,21 @@ function App() {
           <Movie sira={sira} />
 
           <div className="flex gap-3 justify-end py-3">
+            {movies.length === 0 && (
+              <div className="flex flex-col gap-3 justify-end py-3">
+                <p className="text-center">
+                  Görüntülenecek film bulunmamaktadır. Favoriler listesinden
+                  filmleri çıkararak bu sayfaya gelmelerini sağlayabilirsin.
+                </p>
+
+                <Link
+                  to="/listem"
+                  className="py-3 px-6 bg-black shadow-sm text-white my-8 w-52 text-center mx-auto"
+                >
+                  Favoriler
+                </Link>
+              </div>
+            )}
             {sira > 0 && (
               <button
                 className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
@@ -133,6 +148,22 @@ function App() {
 
         <Route path="/listem">
           <div>
+            {Array.isArray(favMovies) && favMovies.length === 0 && (
+              <div className="flex flex-col gap-3 justify-end py-3">
+                <p className="text-center">
+                  Görüntülenecek favori film bulunmamaktadır. Filmler
+                  listesinden favorilere ekleme yaparak bu sayfaya gelmelerini
+                  sağlayabilirsin.
+                </p>
+
+                <Link
+                  to="/"
+                  className="py-3 px-6 bg-black shadow-sm text-white my-8 w-52 text-center mx-auto"
+                >
+                  Fimler Listesi
+                </Link>
+              </div>
+            )}
             {Array.isArray(favMovies) &&
               favMovies.map((movie) => (
                 <FavMovie
