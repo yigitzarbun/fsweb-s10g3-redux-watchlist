@@ -1,13 +1,35 @@
-import { act } from "react-dom/test-utils";
-import { ADD_FAV, REMOVE_FAV } from "../actions/favActions";
+import { ADD_FAV, REMOVE_FAV, INITIAL_FAVS } from "../actions/favActions";
 
 const initialState = {
   favs: [],
 };
+const key = "fav";
 
-const reducer = (state = initialState, action) => {
+function writeToLocalStorage(data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function readFromLocalStorage() {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+function getInitialFavs(key) {
+  const savedFavs = localStorage.getItem(key);
+  if (savedFavs) {
+    return readFromLocalStorage(key);
+  } else {
+    return initialState.favs;
+  }
+}
+const reducer = (state = getInitialFavs(key), action) => {
   switch (action.type) {
+    case INITIAL_FAVS:
+      return {
+        ...state,
+        favs: getInitialFavs(key),
+      };
     case ADD_FAV:
+      writeToLocalStorage([...state.favs, action.payload]);
       const newFav = action.payload;
       const copyFavs = [...state.favs, newFav];
       return {
@@ -20,7 +42,7 @@ const reducer = (state = initialState, action) => {
       const resultFavsArray = copyFavs2.filter(
         (item) => item.id !== action.payload
       );
-
+      writeToLocalStorage([...resultFavsArray]);
       return {
         ...state,
         favs: resultFavsArray,

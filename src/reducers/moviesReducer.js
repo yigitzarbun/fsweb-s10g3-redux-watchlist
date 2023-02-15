@@ -5,6 +5,7 @@ import {
   FIRST_PLACE,
   REMOVE_MOVIE,
   ADD_MOVIE,
+  INITIAL_MOVIES,
 } from "../actions/movieActions";
 
 const initialState = {
@@ -12,8 +13,32 @@ const initialState = {
   place: 0,
 };
 
+const key = "movies";
+
+function writeToLocalStorage(data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function readFromLocalStorage() {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+function getInitialMovies(key) {
+  const savedMovies = localStorage.getItem(key);
+  if (savedMovies) {
+    return readFromLocalStorage(key);
+  } else {
+    return initialState.movies;
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case INITIAL_MOVIES:
+      return {
+        ...state,
+        movies: getInitialMovies(key),
+      };
     case NEXT_PLACE:
       let copyPlace = state.place;
       copyPlace = copyPlace + 1;
@@ -43,12 +68,14 @@ const reducer = (state = initialState, action) => {
       let resultArray = copyMovies.filter(
         (movie) => movie.id !== action.payload
       );
+      writeToLocalStorage([...resultArray]);
       return {
         ...state,
         movies: [...resultArray],
       };
 
     case ADD_MOVIE:
+      writeToLocalStorage([...state.movies, action.payload]);
       const copyMovies2 = [...state.movies];
       const newMovie = action.payload;
       const resultArray2 = [...copyMovies2, newMovie];
