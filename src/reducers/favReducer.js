@@ -1,4 +1,9 @@
-import { ADD_FAV, REMOVE_FAV, INITIAL_FAVS } from "../actions/favActions";
+import {
+  ADD_FAV,
+  REMOVE_FAV,
+  INITIAL_FAVS,
+  REMOVE_ALL_FAVS,
+} from "../actions/favActions";
 import { toast } from "react-toastify";
 const initialState = {
   favs: [],
@@ -47,6 +52,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         favs: resultFavsArray,
+      };
+    case REMOVE_ALL_FAVS:
+      writeToLocalStorage([]);
+      return {
+        ...state,
+        favs: [],
       };
     default:
       return state;

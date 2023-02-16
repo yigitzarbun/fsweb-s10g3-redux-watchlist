@@ -6,6 +6,7 @@ import {
   REMOVE_MOVIE,
   ADD_MOVIE,
   INITIAL_MOVIES,
+  ADD_ALL_MOVIES,
 } from "../actions/movieActions";
 
 const initialState = {
@@ -82,6 +83,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         movies: [...resultArray2],
+      };
+
+    case ADD_ALL_MOVIES:
+      writeToLocalStorage([...initialState.movies]);
+      return {
+        ...state,
+        movies: initialState.movies,
       };
     default:
       return state;

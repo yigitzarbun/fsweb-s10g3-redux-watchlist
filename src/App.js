@@ -5,13 +5,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addFav, removeFav, loadInitialFavs } from "./actions/favActions";
+import { addFav, loadInitialFavs, removeAllFavs } from "./actions/favActions";
 import {
   nextPlace,
   prevPlace,
   firstPlace,
   removeMovie,
   loadInitialMovies,
+  addAllMovies,
 } from "./actions/movieActions";
 import { useEffect } from "react";
 
@@ -43,8 +44,9 @@ function App() {
     toast("Favorielere eklendi!");
   };
 
-  const handleRemove = () => {
-    dispatch(removeFav(movies[sira].id));
+  const handleRemoveFavs = () => {
+    dispatch(removeAllFavs());
+    dispatch(addAllMovies());
   };
 
   return (
@@ -72,10 +74,15 @@ function App() {
         </NavLink>
         <NavLink
           to="/listem"
-          className="py-3 px-6 "
+          className="py-3 px-6 flex gap-x-5 items-center"
           activeClassName="bg-white shadow-sm text-blue-600"
         >
           Listem
+          {Array.isArray(favMovies) && (
+            <p className="text-gray-50 text-sm bg-sky-600 py-1 px-2 rounded-full">
+              {favMovies.length}
+            </p>
+          )}
         </NavLink>
       </nav>
       <Switch>
@@ -135,14 +142,6 @@ function App() {
                   Listeme ekle
                 </button>
               )}
-            {Array.isArray(favMovies) && favMovies.includes(movies[sira]) && (
-              <button
-                className="select-none px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white"
-                onClick={handleRemove}
-              >
-                Listemden çıkar
-              </button>
-            )}
           </div>
         </Route>
 
@@ -174,6 +173,13 @@ function App() {
                 />
               ))}
           </div>
+          <button
+            onClick={handleRemoveFavs}
+            hidden={favMovies.length === 0}
+            className="underline"
+          >
+            Favorileri Temizle
+          </button>
         </Route>
       </Switch>
     </div>
