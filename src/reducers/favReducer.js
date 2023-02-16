@@ -21,7 +21,7 @@ function getInitialFavs(key) {
     return initialState.favs;
   }
 }
-const reducer = (state = getInitialFavs(key), action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case INITIAL_FAVS:
       return {

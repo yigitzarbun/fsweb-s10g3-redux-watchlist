@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 export default function Movie(props) {
   const movies = useSelector((store) => store.moviesReducer.movies);
   const movie = movies[props.sira];
-
+  console.log(movies);
   return (
     <div>
       {movie && (
@@ -16,7 +16,9 @@ export default function Movie(props) {
           <div className="p-8 flex flex-col gap-4 text-sm">
             <div>
               <h2 className="text-2xl">{movie.title}</h2>
-              <p className="italic text-sm">{movie.genres.join(", ")}</p>
+              <p className="italic text-sm">
+                {Array.isArray(movie.genres) ? movie.genres.join(", ") : ""}
+              </p>
             </div>
             <p className="">{movie.plot}</p>
             <div className="flex flex-col sm:flex-row">
